@@ -22,12 +22,18 @@ module.exports = function productReviews () {
       return res.status(401).json({ status: 'error', message: 'User not authenticated' });
     }
 
+    const sanitizedMessage = security(req.body.message);
+
+    if (!sanitizedMessage || typeof sanitizedMessage !== 'string' || sanitizedMessage.length === 0) {
+      return res.status(400).json({ status: 'error', message: 'Invalid or empty message' });
+    }
+
     challengeUtils.solveIf(challenges.forgedReviewChallenge, 
       () => { return user && user.data.email !== req.body.author })
 
     reviewsCollection.insert({
       product: req.params.id,
-      message: req.body.message,
+      message: sanitizedMessage,
       author: req.body.email,
       likesCount: 0,
       likedBy: []
