@@ -14,12 +14,27 @@ const security = require('../lib/insecurity')
 
 module.exports = function productReviews () {
   return (req: Request, res: Response) => {
+
     const user = security.authenticatedUsers.from(req)
-    challengeUtils.solveIf(challenges.forgedReviewChallenge, () => { return user && user.data.email !== req.body.author })
-    reviewsCollection.insert({
+
+    // Verifica que el usuario está autenticado
+    if (!user) {
+      return res.status(401).json({ status: 'error', message: 'User not authenticated' });
+    }
+
+    const sanitizedMessage = security(req.body.message);
+
+    if (!sanitizedMessage || typeof sanitizedMessage !== 'string' || sanitizedMessage.length === 0) {
+      return res.status(400).json({ status: 'error', message: 'Invalid or empty message' });
+    }
+
+    challengeUtils.solveIf(challenges.forgedReviewChallenge, 
+      () => { return user && user.data.email !== req.body.author })
+
+    reviewsCollection.insertOne({
       product: req.params.id,
-      message: req.body.message,
-      author: req.body.author,
+      message: sanitizedMessage,
+      author: req.body.email,
       likesCount: 0,
       likedBy: []
     }).then(() => {
@@ -27,5 +42,6 @@ module.exports = function productReviews () {
     }, (err: unknown) => {
       res.status(500).json(utils.getErrorMessage(err))
     })
+
   }
 }
