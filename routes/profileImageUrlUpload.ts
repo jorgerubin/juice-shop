@@ -12,19 +12,15 @@ import * as utils from '../lib/utils'
 const security = require('../lib/insecurity')
 const request = require('request')
 
-const schemesList = ["http:", "https:"];
-const domainsList = ["trusted1.juice-shop.com", "trusted2.juice-shop.com"];
-
 module.exports = function profileImageUrlUpload () {
   return (req: Request, res: Response, next: NextFunction) => {
     if (req.body.imageUrl !== undefined) {
       const url = req.body.imageUrl
-      if (url.match(/(.)*solve\/challenges\/server-side(.)*/) !== null && schemesList.includes(url.protocol) && domainsList.includes(url.hostname)) req.app.locals.abused_ssrf_bug = true
+      if (url.match(/(.)*solve\/challenges\/server-side(.)*/) !== null) req.app.locals.abused_ssrf_bug = true
       const loggedInUser = security.authenticatedUsers.get(req.cookies.token)
       if (loggedInUser) {
-        const imageRequest = request
-          .get(url)
-          .on('error', function (err: unknown) {
+        const imageRequest = request.get(url)
+        imageRequest.on('error', function (err: unknown) {
             UserModel.findByPk(loggedInUser.data.id).then(async (user: UserModel | null) => { return await user?.update({ profileImage: url }) }).catch((error: Error) => { next(error) })
             logger.warn(`Error retrieving user profile image: ${utils.getErrorMessage(err)}; using image link directly`)
           })
