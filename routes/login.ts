@@ -33,7 +33,7 @@ module.exports = function login () {
 
   return (req: Request, res: Response, next: NextFunction) => {
     verifyPreLoginChallenges(req) // vuln-code-snippet hide-line
-    sqlsentence = `SELECT * FROM Users WHERE email = '${req.body.email || ''}' AND password = '${security.hash(req.body.password || '')}' AND deletedAt IS NULL`, { model: UserModel, plain: true }
+    sqlsentence = `SELECT * FROM Users WHERE email = :email AND password = :password AND deletedAt IS NULL`
     
     const replacements = {
       email: req.body.email || '',
