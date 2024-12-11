@@ -10,9 +10,6 @@ import { challenges } from '../data/datacache'
 
 const security = require('../lib/insecurity')
 
-<<<<<<< HEAD
-const allowedDomains = ['example.com', 'anotherdomain.com'];
-=======
 const allowedDomains = ['example.com', 'another-example.com'] // Dominios permitidos
 
 function isValidUrl(url) {
@@ -23,7 +20,6 @@ function isValidUrl(url) {
     return false
   }
 }
->>>>>>> fd77efffe312335147f68cdbf0f2e83ffcfd1fa7
 
 module.exports = function performRedirect () {
   return ({ query }: Request, res: Response, next: NextFunction) => {
@@ -31,15 +27,10 @@ module.exports = function performRedirect () {
     if (security.isRedirectAllowed(toUrl)) {
       challengeUtils.solveIf(challenges.redirectCryptoCurrencyChallenge, () => { return toUrl === 'https://explorer.dash.org/address/Xr556RzuwX6hg5EGpkybbv5RanJoZN17kW' || toUrl === 'https://blockchain.info/address/1AbKfgvw9psQ41NbLi8kufDQTezwG8DRZm' || toUrl === 'https://etherscan.io/address/0x0f933ab9fcaaa782d0279c300d73750e1311eae6' })
       challengeUtils.solveIf(challenges.redirectChallenge, () => { return isUnintendedRedirect(toUrl) })
-<<<<<<< HEAD
-      if (allowedDomains.includes(toUrl)) {
-        res.redirect(toUrl)
-=======
       if (isValidUrl(toUrl)) {
         res.redirect(toUrl)
       } else {
         res.redirect('/')
->>>>>>> fd77efffe312335147f68cdbf0f2e83ffcfd1fa7
       }
     } else {
       res.status(406)
