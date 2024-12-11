@@ -29,7 +29,16 @@ module.exports = function profileImageUrlUpload () {
   return (req: Request, res: Response, next: NextFunction) => {
     if (req.body.imageUrl !== undefined) {
       const url = req.body.imageUrl
+<<<<<<< HEAD
+      const allowedPaths = /^\/solve\/challenges\/server-side$/;
+      if (url && typeof url === 'string' && allowedPaths.test(url)) {
+        req.app.locals.abused_ssrf_bug = true
+      } else {
+        req.app.locals.abused_ssrf_bug = false
+      }
+=======
       if (url.match(/(.)*solve\/challenges\/server-side(.)*/) !== null && redirectAllowlist.includes(url )) req.app.locals.abused_ssrf_bug = true
+>>>>>>> 154e25c67e8a5854f56e5556d44b58d015e8d826
       const loggedInUser = security.authenticatedUsers.get(req.cookies.token)
       if (loggedInUser) {
         const imageRequest = request.get(sanitizeUrl(url));
