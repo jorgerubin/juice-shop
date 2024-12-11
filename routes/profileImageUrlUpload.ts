@@ -16,7 +16,12 @@ module.exports = function profileImageUrlUpload () {
   return (req: Request, res: Response, next: NextFunction) => {
     if (req.body.imageUrl !== undefined) {
       const url = req.body.imageUrl
-      if (url.match(/(.)*solve\/challenges\/server-side(.)*/) !== null) req.app.locals.abused_ssrf_bug = true
+      const allowedPaths = /^\/solve\/challenges\/server-side$/;
+      if (url && typeof url === 'string' && allowedPaths.test(url)) {
+        req.app.locals.abused_ssrf_bug = true
+      } else {
+        req.app.locals.abused_ssrf_bug = false
+      }
       const loggedInUser = security.authenticatedUsers.get(req.cookies.token)
       if (loggedInUser) {
         const imageRequest = request
