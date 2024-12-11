@@ -31,7 +31,7 @@ module.exports = function productReviews () {
     challengeUtils.solveIf(challenges.forgedReviewChallenge, 
       () => { return user && user.data.email !== req.body.author })
 
-    reviewsCollection.insert({
+    reviewsCollection.insertOne({
       product: req.params.id,
       message: sanitizedMessage,
       author: req.body.email,
