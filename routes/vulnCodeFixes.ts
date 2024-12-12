@@ -82,7 +82,7 @@ export const checkCorrectFix = () => async (req: Request<Record<string, unknown>
     let safePath = baseDir + fileuser
 
     if (safePath.startsWith(baseDir)) {
-      const fileContents = fs.readFileSync(fileuser, { encoding: 'utf8', flag: 'r' });
+      const fileContents = fs.readFile(fileuser, { encoding: 'utf8', flag: 'r' });
       const codingChallengeInfos = yaml.load(fileContents);
       const selectedFixInfo = codingChallengeInfos?.fixes.find(({ id }: { id: number }) => id === selectedFix + 1)
       if (selectedFixInfo?.explanation) explanation = res.__(selectedFixInfo.explanation)
