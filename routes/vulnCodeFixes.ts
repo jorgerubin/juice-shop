@@ -77,7 +77,7 @@ export const checkCorrectFix = () => async (req: Request<Record<string, unknown>
     })
   } else {
     let explanation
-    const existFile
+    let existFile
     let baseDir = './data/static/codefixes/'
     let fileName = `${key}.info.yml`
     const safePath = path.join(baseDir, fileName);
