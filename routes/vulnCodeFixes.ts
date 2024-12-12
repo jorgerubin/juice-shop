@@ -79,13 +79,13 @@ export const checkCorrectFix = () => async (req: Request<Record<string, unknown>
     let explanation
     let existFile
     let baseDir = './data/static/codefixes/'
-    let fileName = `${key}.info.yml`
-    const safePath = path.join(baseDir, fileName);
+    let fileuser = `${key}.info.yml`
+    let safePath = baseDir + fileuser
 
     if (safePath.startsWith(baseDir)) {
       try{
-        fs.accessSync(safePath, fs.constants.F_OK);
-        existFile = fs.existsSync(safePath);
+        fs.accessSync(safePath, fs.constants.F_OK)
+        existFile = fs.existsSync(safePath)
       } catch (err) {
         existFile = false
       }
