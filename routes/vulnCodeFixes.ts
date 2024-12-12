@@ -83,7 +83,12 @@ export const checkCorrectFix = () => async (req: Request<Record<string, unknown>
     const safePath = path.join(baseDir, fileName);
 
     if (safePath.startsWith(baseDir)) {
-      existFile = fs.existsSync(safePath);
+      try{
+        fs.accessSync(safePath, fs.constants.F_OK);
+        existFile = fs.existsSync(safePath);
+      } catch (err) {
+        existFile = false
+      }
     }
 
     if (existFile) {
