@@ -77,11 +77,11 @@ export const checkCorrectFix = () => async (req: Request<Record<string, unknown>
     })
   } else {
     let explanation
-    let pathinfo = './data/static/codefixes/'
-    let file = `${key}.info.yml`
-    let existFile = fs.existsSync(file, { root: pathinfo })
-    if (existFile) {
-      const codingChallengeInfos = yaml.load(fs.readFileSync(pathinfo, 'utf8'))
+    let baseDir = './data/static/codefixes/'
+    let fileName = `${key}.info.yml`
+    const safePath = path.join(baseDir, fileName);
+    if (safePath.startsWith(baseDir)) {
+      const codingChallengeInfos = yaml.load(fs.readFileSync(safePath, 'utf8'))
       const selectedFixInfo = codingChallengeInfos?.fixes.find(({ id }: { id: number }) => id === selectedFix + 1)
       if (selectedFixInfo?.explanation) explanation = res.__(selectedFixInfo.explanation)
     }
