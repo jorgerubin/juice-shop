@@ -83,7 +83,7 @@ export const checkCorrectFix = () => async (req: Request<Record<string, unknown>
 
     if (safePath.startsWith(baseDir)) {
       // Leer y parsear el archivo YAML de forma segura
-      const fileContent = fs.readFileSync(fileuser, { root: baseDir, encoding: 'utf8' })
+      const fileContent = fs.readFileSync(fileuser, 'utf8')
 
       // Cargar el contenido YAML, utilizando un parseo seguro
       const codingChallengeInfos = yaml.load(fileContent, { schema: yaml.JSON_SCHEMA })
