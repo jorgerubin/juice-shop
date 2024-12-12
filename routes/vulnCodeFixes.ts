@@ -76,7 +76,7 @@ export const checkCorrectFix = () => async (req: Request<Record<string, unknown>
     })
   } else {
     let explanation
-    pathinfo = `./data/static/codefixes/${key}.info.yml`
+    let pathinfo = `./data/static/codefixes/${key}.info.yml`
     if (fs.existsSync(pathinfo)) {
       const codingChallengeInfos = yaml.load(fs.readFileSync(pathinfo, 'utf8'))
       const selectedFixInfo = codingChallengeInfos?.fixes.find(({ id }: { id: number }) => id === selectedFix + 1)
