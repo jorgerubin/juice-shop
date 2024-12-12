@@ -95,19 +95,20 @@ export const checkCorrectFix = () => async (req: Request<Record<string, unknown>
       const codingChallengeInfos = yaml.load(fs.readFileSync(safePath, 'utf8'))
       const selectedFixInfo = codingChallengeInfos?.fixes.find(({ id }: { id: number }) => id === selectedFix + 1)
       if (selectedFixInfo?.explanation) explanation = res.__(selectedFixInfo.explanation)
-    }
-    if (selectedFix === fixData.correct) {
-      await challengeUtils.solveFixIt(key)
-      res.status(200).json({
-        verdict: true,
-        explanation
-      })
-    } else {
-      accuracy.storeFixItVerdict(key, false)
-      res.status(200).json({
-        verdict: false,
-        explanation
-      })
+    
+      if (selectedFix === fixData.correct) {
+        await challengeUtils.solveFixIt(key)
+        res.status(200).json({
+          verdict: true,
+          explanation
+        })
+      } else {
+        accuracy.storeFixItVerdict(key, false)
+        res.status(200).json({
+          verdict: false,
+          explanation
+        })
+      }
     }
   }
 }
