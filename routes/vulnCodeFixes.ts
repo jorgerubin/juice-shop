@@ -1,7 +1,6 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import * as accuracy from '../lib/accuracy'
 
-const path = require('path');
 const challengeUtils = require('../lib/challengeUtils')
 const fs = require('fs')
 const yaml = require('js-yaml')
@@ -77,9 +76,9 @@ export const checkCorrectFix = () => async (req: Request<Record<string, unknown>
     })
   } else {
     let explanation
-    const sanitizedPath = path.join('data', 'static', 'codefixes', `${key}.info.yml`);
-    if (fs.existsSync(sanitizedPath)) {
-      const codingChallengeInfos = yaml.load(fs.readFileSync(sanitizedPath, 'utf8'))
+    pathinfo = `./data/static/codefixes/${key}.info.yml`
+    if (fs.existsSync(pathinfo)) {
+      const codingChallengeInfos = yaml.load(fs.readFileSync(pathinfo, 'utf8'))
       const selectedFixInfo = codingChallengeInfos?.fixes.find(({ id }: { id: number }) => id === selectedFix + 1)
       if (selectedFixInfo?.explanation) explanation = res.__(selectedFixInfo.explanation)
     }
